@@ -53,7 +53,15 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleLogout = () => {
+    // Очищаем все админ-данные
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminData');
+    
+    // Вызываем logout из контекста
     logout();
+    
+    // Перенаправляем на главную страницу
+    window.location.href = '/';
   };
 
   if (isLoading) {
@@ -187,11 +195,17 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => window.location.href = '/admin/schedule'}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 <Plus size={16} className="inline mr-2" />
                 Добавить занятие
               </button>
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => window.location.href = '/admin/schedule'}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Редактировать расписание
               </button>
             </div>
