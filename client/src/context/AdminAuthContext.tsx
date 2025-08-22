@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { AdminUser } from '../types/admin';
-import { ApiService } from '../services/api';
+import { apiService } from '../services/api';
 
 interface AdminAuthContextType {
   admin: AdminUser | null;
@@ -37,7 +37,7 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
     try {
       const token = localStorage.getItem('adminToken');
       if (token) {
-        const adminData = await ApiService.getAdminProfile();
+        const adminData = await apiService.getAdminProfile();
         setAdmin(adminData);
       }
     } catch (error) {
@@ -50,7 +50,7 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
-      const response = await ApiService.adminLogin(email, password);
+      const response = await apiService.adminLogin(email, password);
       localStorage.setItem('adminToken', response.token);
       setAdmin(response.admin);
       return true;
@@ -69,7 +69,7 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
 
   const refreshAdminData = async () => {
     try {
-      const adminData = await ApiService.getAdminProfile();
+      const adminData = await apiService.getAdminProfile();
       setAdmin(adminData);
     } catch (error) {
       console.error('Failed to refresh admin data:', error);

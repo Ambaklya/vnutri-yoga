@@ -13,7 +13,7 @@ import {
   Mail
 } from 'lucide-react';
 import { Booking } from '../../types/admin';
-import { ApiService } from '../../services/api';
+import { apiService } from '../../services/api';
 
 const BookingsManagement: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -35,7 +35,7 @@ const BookingsManagement: React.FC = () => {
   const loadBookings = async () => {
     try {
       setIsLoading(true);
-      const data = await ApiService.getAllBookings();
+      const data = await apiService.getAllBookings();
       setBookings(data);
     } catch (error) {
       console.error('Failed to load bookings:', error);
@@ -69,7 +69,7 @@ const BookingsManagement: React.FC = () => {
 
   const updateBookingStatus = async (id: string, status: Booking['status']) => {
     try {
-      await ApiService.updateBookingStatus(id, status);
+      await apiService.updateBookingStatus(id, status);
       await loadBookings(); // Перезагружаем данные
     } catch (error) {
       console.error('Failed to update booking status:', error);
@@ -78,7 +78,7 @@ const BookingsManagement: React.FC = () => {
 
   const updatePaymentStatus = async (id: string, paymentStatus: Booking['paymentStatus']) => {
     try {
-      await ApiService.updatePaymentStatus(id, paymentStatus);
+      await apiService.updatePaymentStatus(id, paymentStatus);
       await loadBookings(); // Перезагружаем данные
     } catch (error) {
       console.error('Failed to update payment status:', error);

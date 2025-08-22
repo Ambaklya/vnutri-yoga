@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { AdminStats } from '../../types/admin';
-import { ApiService } from '../../services/api';
+import { apiService } from '../../services/api';
 
 const AdminDashboard: React.FC = () => {
   const { admin, logout } = useAdminAuth();
@@ -25,7 +25,7 @@ const AdminDashboard: React.FC = () => {
 
   const loadStats = async () => {
     try {
-      const statsData = await ApiService.getAdminStats();
+      const statsData = await apiService.getAdminStats();
       setStats(statsData);
     } catch (error) {
       console.error('Failed to load stats:', error);
