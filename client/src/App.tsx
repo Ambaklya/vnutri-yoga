@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import ClassesView from './components/Classes/ClassesView';
 import VideosView from './components/Videos/VideosView';
@@ -40,6 +40,17 @@ const App: React.FC = () => {
                     <div className="mt-12 text-white/70">
                       <p className="text-lg">Владимир, улица Сакко и Ванцетти, 50к3, офис 306</p>
                       <p className="text-xl font-medium mt-2">+7 (999) 070-31-08</p>
+                    </div>
+                    
+                    {/* Кнопка админ-панели */}
+                    <div className="mt-8">
+                      <Link
+                        to="/admin"
+                        className="inline-flex items-center space-x-2 px-6 py-3 bg-yellow-500/20 text-yellow-300 rounded-xl hover:bg-yellow-500/30 transition-all border border-yellow-500/30 hover:scale-105 transform"
+                      >
+                        <Lock size={20} />
+                        <span className="font-medium">Войти в админ-панель</span>
+                      </Link>
                     </div>
                   </div>
                 </div>

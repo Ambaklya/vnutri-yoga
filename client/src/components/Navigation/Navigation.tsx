@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, Video, User } from 'lucide-react';
+import { Menu, X, Calendar, Video, User, Lock } from 'lucide-react';
 
 const Navigation: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,6 +48,15 @@ const Navigation: React.FC = () => {
                 </Link>
               );
             })}
+            
+            {/* Кнопка админ-панели */}
+            <Link
+              to="/admin"
+              className="flex items-center space-x-2 px-4 py-2 bg-yellow-500/20 text-yellow-300 rounded-lg hover:bg-yellow-500/30 transition-all border border-yellow-500/30"
+            >
+              <Lock size={18} />
+              <span>Админ</span>
+            </Link>
           </div>
 
           {/* Мобильное меню */}
@@ -82,6 +91,16 @@ const Navigation: React.FC = () => {
                   </Link>
                 );
               })}
+              
+              {/* Кнопка админ-панели в мобильном меню */}
+              <Link
+                to="/admin"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center space-x-3 px-4 py-3 bg-yellow-500/20 text-yellow-300 rounded-lg hover:bg-yellow-500/30 transition-all border border-yellow-500/30"
+              >
+                <Lock size={20} />
+                <span>Админ панель</span>
+              </Link>
             </div>
           </div>
         )}

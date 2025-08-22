@@ -104,9 +104,14 @@ const AdminLogin: React.FC = () => {
 
           {/* Информация */}
           <div className="mt-6 pt-6 border-t border-white/20">
-            <p className="text-white/60 text-sm text-center">
+            <p className="text-white/60 text-sm text-center mb-3">
               Доступ только для администраторов студии
             </p>
+            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3">
+              <p className="text-yellow-300 text-xs font-medium mb-1">Тестовые данные для демонстрации:</p>
+              <p className="text-yellow-200 text-xs">Email: admin@vnutri.ru</p>
+              <p className="text-yellow-200 text-xs">Пароль: admin123</p>
+            </div>
           </div>
         </div>
       </div>
