@@ -43,7 +43,7 @@ const ClassesView: React.FC = () => {
       level: 'Начинающий',
       capacity: 15,
       enrolled: 8,
-      location: 'Зал 1',
+      location: 'Основной зал',
       date: '2024-01-20',
       recurringDays: ['monday', 'wednesday', 'friday']
     },
@@ -56,7 +56,7 @@ const ClassesView: React.FC = () => {
       level: 'Средний',
       capacity: 12,
       enrolled: 10,
-      location: 'Зал 2',
+      location: 'Зал для практик',
       date: '2024-01-20',
       recurringDays: ['tuesday', 'thursday']
     },
@@ -69,7 +69,7 @@ const ClassesView: React.FC = () => {
       level: 'Начинающий',
       capacity: 20,
       enrolled: 15,
-      location: 'Зал 3',
+      location: 'Зал медитации',
       date: '2024-01-20',
       recurringDays: ['monday', 'wednesday', 'friday']
     }

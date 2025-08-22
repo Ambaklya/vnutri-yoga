@@ -15,8 +15,11 @@ const ScheduleManagement: React.FC = () => {
       currentBookings: 8,
       maxBookings: 15,
       level: 'Начинающий',
-      location: 'Зал 1',
-      isActive: true
+      location: 'Основной зал',
+      isActive: true,
+      startDate: '2024-01-01',
+      endDate: '2024-03-31',
+      recurringDays: ['monday', 'wednesday', 'friday']
     },
     {
       id: '2',
@@ -29,8 +32,28 @@ const ScheduleManagement: React.FC = () => {
       currentBookings: 10,
       maxBookings: 12,
       level: 'Средний',
-      location: 'Зал 2',
-      isActive: true
+      location: 'Зал для практик',
+      isActive: true,
+      startDate: '2024-01-01',
+      endDate: '2024-03-31',
+      recurringDays: ['tuesday', 'thursday']
+    },
+    {
+      id: '3',
+      name: 'Йога для расслабления',
+      instructor: 'Елена Смирнова',
+      time: '20:00',
+      duration: 60,
+      price: 1200,
+      capacity: 20,
+      currentBookings: 15,
+      maxBookings: 20,
+      level: 'Начинающий',
+      location: 'Зал медитации',
+      isActive: true,
+      startDate: '2024-01-01',
+      endDate: '2024-03-31',
+      recurringDays: ['monday', 'wednesday', 'friday']
     }
   ]);
   const [formData, setFormData] = useState({
@@ -39,7 +62,12 @@ const ScheduleManagement: React.FC = () => {
     time: '',
     duration: 90,
     price: 1500,
-    capacity: 15
+    capacity: 15,
+    location: 'Основной зал',
+    level: 'Начинающий',
+    startDate: '',
+    endDate: '',
+    recurringDays: [] as string[]
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +105,12 @@ const ScheduleManagement: React.FC = () => {
       time: '',
       duration: 90,
       price: 1500,
-      capacity: 15
+      capacity: 15,
+      location: 'Основной зал',
+      level: 'Начинающий',
+      startDate: '',
+      endDate: '',
+      recurringDays: []
     });
     
     // Скрываем форму
@@ -93,7 +126,12 @@ const ScheduleManagement: React.FC = () => {
       time: '',
       duration: 90,
       price: 1500,
-      capacity: 15
+      capacity: 15,
+      location: 'Основной зал',
+      level: 'Начинающий',
+      startDate: '',
+      endDate: '',
+      recurringDays: []
     });
     setShowForm(false);
   };
@@ -213,6 +251,103 @@ const ScheduleManagement: React.FC = () => {
                   min="1"
                   max="50"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Место проведения
+                </label>
+                <select
+                  name="location"
+                  value={formData.location}
+                  onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
+                >
+                  <option value="Основной зал">Основной зал</option>
+                  <option value="Зал для практик">Зал для практик</option>
+                  <option value="Зал медитации">Зал медитации</option>
+                  <option value="Открытая площадка">Открытая площадка</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Уровень
+                </label>
+                <select
+                  name="level"
+                  value={formData.level}
+                  onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value }))}
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
+                >
+                  <option value="Начинающий">Начинающий</option>
+                  <option value="Средний">Средний</option>
+                  <option value="Продвинутый">Продвинутый</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Даты и повторения */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Дата начала *
+                </label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Дата окончания *
+                </label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Повторяющиеся дни */}
+            <div>
+              <label className="block text-sm font-medium text-white/80 mb-2">
+                Повторяющиеся дни
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-7 gap-2">
+                {[
+                  { key: 'monday', label: 'Пн' },
+                  { key: 'tuesday', label: 'Вт' },
+                  { key: 'wednesday', label: 'Ср' },
+                  { key: 'thursday', label: 'Чт' },
+                  { key: 'friday', label: 'Пт' },
+                  { key: 'saturday', label: 'Сб' },
+                  { key: 'sunday', label: 'Вс' }
+                ].map(day => (
+                  <button
+                    key={day.key}
+                    type="button"
+                    onClick={() => {
+                      const newRecurringDays = formData.recurringDays.includes(day.key)
+                        ? formData.recurringDays.filter(d => d !== day.key)
+                        : [...formData.recurringDays, day.key];
+                      setFormData(prev => ({ ...prev, recurringDays: newRecurringDays }));
+                    }}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                      formData.recurringDays.includes(day.key)
+                        ? 'bg-white/20 text-white border border-white/30'
+                        : 'bg-white/10 text-white/70 hover:bg-white/20'
+                    }`}
+                  >
+                    {day.label}
+                  </button>
+                ))}
               </div>
             </div>
             <div className="flex justify-end space-x-3 pt-6">

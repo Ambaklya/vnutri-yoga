@@ -398,6 +398,14 @@ const BookingsManagement: React.FC = () => {
                             <XCircle size={16} />
                           </button>
                         )}
+                        
+                        <button
+                          onClick={() => deleteBooking(booking.id)}
+                          className="p-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-all"
+                          title="Удалить"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </div>
                     </td>
                   </tr>
