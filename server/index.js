@@ -6,6 +6,7 @@ const classesRoutes = require('./routes/classes');
 const videosRoutes = require('./routes/videos');
 const bookingsRoutes = require('./routes/bookings');
 const userRoutes = require('./routes/user');
+const adminRoutes = require('./routes/admin');
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ app.use('/api/classes', classesRoutes);
 app.use('/api/videos', videosRoutes);
 app.use('/api/bookings', bookingsRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

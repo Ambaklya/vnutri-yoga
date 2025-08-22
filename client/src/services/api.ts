@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { Class, Booking, Video, AuthResponse, User, ApiError } from '../types';
+import { AdminUser, ClassSchedule, Booking as AdminBooking, PricingPeriod, AdminStats, SyncSettings } from '../types/admin';
 
 class ApiService {
   private api: AxiosInstance;
@@ -96,6 +97,90 @@ class ApiService {
 
   async setPremiumAccess(enabled: boolean): Promise<void> {
     await this.api.post('/user/premium', { enabled });
+  }
+
+  // Admin methods
+  async adminLogin(email: string, password: string): Promise<{ token: string; admin: AdminUser }> {
+    const response = await this.api.post('/admin/auth/login', { email, password });
+    return response.data;
+  }
+
+  async getAdminProfile(): Promise<AdminUser> {
+    const response = await this.api.get('/admin/profile');
+    return response.data;
+  }
+
+  // Class Schedule Management
+  async getClassSchedules(): Promise<ClassSchedule[]> {
+    const response = await this.api.get('/admin/classes/schedules');
+    return response.data;
+  }
+
+  async createClassSchedule(schedule: Omit<ClassSchedule, 'id'>): Promise<ClassSchedule> {
+    const response = await this.api.post('/admin/classes/schedules', schedule);
+    return response.data;
+  }
+
+  async updateClassSchedule(id: string, schedule: Partial<ClassSchedule>): Promise<ClassSchedule> {
+    const response = await this.api.put(`/admin/classes/schedules/${id}`, schedule);
+    return response.data;
+  }
+
+  async deleteClassSchedule(id: string): Promise<void> {
+    await this.api.delete(`/admin/classes/schedules/${id}`);
+  }
+
+  // Booking Management
+  async getAllBookings(): Promise<AdminBooking[]> {
+    const response = await this.api.get('/admin/bookings');
+    return response.data;
+  }
+
+  async updateBookingStatus(id: string, status: AdminBooking['status']): Promise<AdminBooking> {
+    const response = await this.api.patch(`/admin/bookings/${id}/status`, { status });
+    return response.data;
+  }
+
+  async updatePaymentStatus(id: string, paymentStatus: AdminBooking['paymentStatus']): Promise<AdminBooking> {
+    const response = await this.api.patch(`/admin/bookings/${id}/payment`, { paymentStatus });
+    return response.data;
+  }
+
+  // Pricing Management
+  async getPricingPeriods(): Promise<PricingPeriod[]> {
+    const response = await this.api.get('/admin/pricing');
+    return response.data;
+  }
+
+  async createPricingPeriod(pricing: Omit<PricingPeriod, 'id'>): Promise<PricingPeriod> {
+    const response = await this.api.post('/admin/pricing', pricing);
+    return response.data;
+  }
+
+  async updatePricingPeriod(id: string, pricing: Partial<PricingPeriod>): Promise<PricingPeriod> {
+    const response = await this.api.put(`/admin/pricing/${id}`, pricing);
+    return response.data;
+  }
+
+  // Statistics
+  async getAdminStats(): Promise<AdminStats> {
+    const response = await this.api.get('/admin/stats');
+    return response.data;
+  }
+
+  // Sync Settings
+  async getSyncSettings(): Promise<SyncSettings> {
+    const response = await this.api.get('/admin/sync');
+    return response.data;
+  }
+
+  async updateSyncSettings(settings: Partial<SyncSettings>): Promise<SyncSettings> {
+    const response = await this.api.put('/admin/sync', settings);
+    return response.data;
+  }
+
+  async triggerMobileSync(): Promise<void> {
+    await this.api.post('/admin/sync/mobile');
   }
 }
 
