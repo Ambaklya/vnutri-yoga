@@ -49,6 +49,15 @@ const Navigation: React.FC = () => {
               );
             })}
             
+            {/* Кнопка личного кабинета */}
+            <Link
+              to="/profile"
+              className="flex items-center space-x-2 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+            >
+              <User size={18} />
+              <span>Личный кабинет</span>
+            </Link>
+            
             {/* Кнопка админ-панели */}
             <Link
               to="/admin"
@@ -91,6 +100,16 @@ const Navigation: React.FC = () => {
                   </Link>
                 );
               })}
+              
+              {/* Кнопка личного кабинета в мобильном меню */}
+              <Link
+                to="/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center space-x-3 px-4 py-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
+                <User size={20} />
+                <span>Личный кабинет</span>
+              </Link>
               
               {/* Кнопка админ-панели в мобильном меню */}
               <Link

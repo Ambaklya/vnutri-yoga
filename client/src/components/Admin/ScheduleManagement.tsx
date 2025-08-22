@@ -15,7 +15,6 @@ const ScheduleManagement: React.FC = () => {
       currentBookings: 8,
       maxBookings: 15,
       level: 'Начинающий',
-      location: 'Основной зал',
       isActive: true,
       startDate: '2024-01-01',
       endDate: '2024-03-31',
@@ -32,7 +31,6 @@ const ScheduleManagement: React.FC = () => {
       currentBookings: 10,
       maxBookings: 12,
       level: 'Средний',
-      location: 'Зал для практик',
       isActive: true,
       startDate: '2024-01-01',
       endDate: '2024-03-31',
@@ -49,7 +47,6 @@ const ScheduleManagement: React.FC = () => {
       currentBookings: 15,
       maxBookings: 20,
       level: 'Начинающий',
-      location: 'Зал медитации',
       isActive: true,
       startDate: '2024-01-01',
       endDate: '2024-03-31',
@@ -63,7 +60,6 @@ const ScheduleManagement: React.FC = () => {
     duration: 90,
     price: 1500,
     capacity: 15,
-    location: 'Основной зал',
     level: 'Начинающий',
     startDate: '',
     endDate: '',
@@ -106,7 +102,6 @@ const ScheduleManagement: React.FC = () => {
       duration: 90,
       price: 1500,
       capacity: 15,
-      location: 'Основной зал',
       level: 'Начинающий',
       startDate: '',
       endDate: '',
@@ -127,7 +122,6 @@ const ScheduleManagement: React.FC = () => {
       duration: 90,
       price: 1500,
       capacity: 15,
-      location: 'Основной зал',
       level: 'Начинающий',
       startDate: '',
       endDate: '',
@@ -252,22 +246,7 @@ const ScheduleManagement: React.FC = () => {
                   max="50"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
-                  Место проведения
-                </label>
-                <select
-                  name="location"
-                  value={formData.location}
-                  onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
-                >
-                  <option value="Основной зал">Основной зал</option>
-                  <option value="Зал для практик">Зал для практик</option>
-                  <option value="Зал медитации">Зал медитации</option>
-                  <option value="Открытая площадка">Открытая площадка</option>
-                </select>
-              </div>
+
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
                   Уровень
@@ -384,12 +363,11 @@ const ScheduleManagement: React.FC = () => {
                   <div>
                     <h4 className="text-xl font-bold text-white mb-2">{schedule.name}</h4>
                     <p className="text-white/80 mb-2">Инструктор: {schedule.instructor}</p>
-                    <div className="flex items-center space-x-6 text-white/60">
-                      <span>🕘 {schedule.time} ({schedule.duration} мин)</span>
-                      <span>📍 {schedule.location}</span>
-                      <span>👥 {schedule.currentBookings}/{schedule.maxBookings}</span>
-                      <span>💰 {schedule.price} ₽</span>
-                    </div>
+                                    <div className="flex items-center space-x-6 text-white/60">
+                  <span>🕘 {schedule.time} ({schedule.duration} мин)</span>
+                  <span>👥 {schedule.currentBookings}/{schedule.maxBookings}</span>
+                  <span>💰 {schedule.price} ₽</span>
+                </div>
                     <div className="mt-2">
                       <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium border border-white/30">
                         {schedule.level}

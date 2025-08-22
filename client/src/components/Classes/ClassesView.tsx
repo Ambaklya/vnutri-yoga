@@ -10,7 +10,6 @@ interface ClassItem {
   level: string;
   capacity: number;
   enrolled: number;
-  location: string;
   date: string;
   recurringDays?: string[];
 }
@@ -43,7 +42,7 @@ const ClassesView: React.FC = () => {
       level: 'Начинающий',
       capacity: 15,
       enrolled: 8,
-      location: 'Основной зал',
+
       date: '2024-01-20',
       recurringDays: ['monday', 'wednesday', 'friday']
     },
@@ -56,7 +55,7 @@ const ClassesView: React.FC = () => {
       level: 'Средний',
       capacity: 12,
       enrolled: 10,
-      location: 'Зал для практик',
+
       date: '2024-01-20',
       recurringDays: ['tuesday', 'thursday']
     },
@@ -69,7 +68,7 @@ const ClassesView: React.FC = () => {
       level: 'Начинающий',
       capacity: 20,
       enrolled: 15,
-      location: 'Зал медитации',
+
       date: '2024-01-20',
       recurringDays: ['monday', 'wednesday', 'friday']
     }
@@ -324,10 +323,7 @@ const ClassesView: React.FC = () => {
                                   <Clock size={18} />
                                   <span>{classItem.time} ({classItem.duration})</span>
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                  <MapPin size={18} />
-                                  <span>{classItem.location}</span>
-                                </div>
+
                                 <div className="flex items-center space-x-2">
                                   <Users size={18} />
                                   <span>{classItem.enrolled}/{classItem.capacity}</span>

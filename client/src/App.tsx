@@ -10,6 +10,7 @@ import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import BookingsManagement from './components/Admin/BookingsManagement';
 import ScheduleManagement from './components/Admin/ScheduleManagement';
+import ClientDashboard from './components/Client/ClientDashboard';
 
 const App: React.FC = () => {
   return (
@@ -89,6 +90,9 @@ const App: React.FC = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/bookings" element={<BookingsManagement />} />
           <Route path="/admin/schedule" element={<ScheduleManagement />} />
+          
+          {/* Клиентские маршруты */}
+          <Route path="/profile" element={<ClientDashboard />} />
         </Routes>
       </AdminAuthProvider>
     </Router>
