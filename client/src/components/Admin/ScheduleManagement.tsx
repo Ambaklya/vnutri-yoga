@@ -3,6 +3,100 @@ import { Plus, Edit, Trash2, ArrowLeft } from 'lucide-react';
 
 const ScheduleManagement: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
+  const [schedules, setSchedules] = useState([
+    {
+      id: '1',
+      name: 'Хатха Йога',
+      instructor: 'Анна Петрова',
+      time: '09:00',
+      duration: 90,
+      price: 1500,
+      capacity: 15,
+      currentBookings: 8,
+      maxBookings: 15,
+      level: 'Начинающий',
+      location: 'Зал 1',
+      isActive: true
+    },
+    {
+      id: '2',
+      name: 'Виньяса Флоу',
+      instructor: 'Михаил Сидоров',
+      time: '18:30',
+      duration: 75,
+      price: 1800,
+      capacity: 12,
+      currentBookings: 10,
+      maxBookings: 12,
+      level: 'Средний',
+      location: 'Зал 2',
+      isActive: true
+    }
+  ]);
+  const [formData, setFormData] = useState({
+    name: '',
+    instructor: '',
+    time: '',
+    duration: 90,
+    price: 1500,
+    capacity: 15
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'duration' || name === 'price' || name === 'capacity' ? parseInt(value) : value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.instructor || !formData.time) {
+      alert('Пожалуйста, заполните все обязательные поля');
+      return;
+    }
+
+    const newSchedule = {
+      id: Date.now().toString(),
+      ...formData,
+      currentBookings: 0,
+      maxBookings: formData.capacity,
+      level: 'Начинающий',
+      location: 'Зал 1',
+      isActive: true
+    };
+
+    setSchedules(prev => [...prev, newSchedule]);
+    
+    // Сбрасываем форму
+    setFormData({
+      name: '',
+      instructor: '',
+      time: '',
+      duration: 90,
+      price: 1500,
+      capacity: 15
+    });
+    
+    // Скрываем форму
+    setShowForm(false);
+    
+    alert('Занятие успешно создано!');
+  };
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      instructor: '',
+      time: '',
+      duration: 90,
+      price: 1500,
+      capacity: 15
+    });
+    setShowForm(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 p-6">
@@ -32,36 +126,48 @@ const ScheduleManagement: React.FC = () => {
 
         {/* Форма добавления */}
         {showForm && (
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-8 border border-white/20">
+          <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-8 border border-white/20">
             <h3 className="text-2xl font-bold text-white mb-6">Новое занятие</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
-                  Название занятия
+                  Название занятия *
                 </label>
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white placeholder-white/50"
                   placeholder="Хатха Йога"
+                  required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
-                  Инструктор
+                  Инструктор *
                 </label>
                 <input
                   type="text"
+                  name="instructor"
+                  value={formData.instructor}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white placeholder-white/50"
                   placeholder="Анна Петрова"
+                  required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
-                  Время начала
+                  Время начала *
                 </label>
                 <input
                   type="time"
+                  name="time"
+                  value={formData.time}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
+                  required
                 />
               </div>
               <div>
@@ -70,8 +176,13 @@ const ScheduleManagement: React.FC = () => {
                 </label>
                 <input
                   type="number"
+                  name="duration"
+                  value={formData.duration}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
                   placeholder="90"
+                  min="30"
+                  max="180"
                 />
               </div>
               <div>
@@ -80,8 +191,12 @@ const ScheduleManagement: React.FC = () => {
                 </label>
                 <input
                   type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
                   placeholder="1500"
+                  min="0"
                 />
               </div>
               <div>
@@ -90,91 +205,88 @@ const ScheduleManagement: React.FC = () => {
                 </label>
                 <input
                   type="number"
+                  name="capacity"
+                  value={formData.capacity}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg focus:ring-2 focus:ring-white/50 focus:border-transparent text-white"
                   placeholder="15"
+                  min="1"
+                  max="50"
                 />
               </div>
             </div>
             <div className="flex justify-end space-x-3 pt-6">
               <button
-                onClick={() => setShowForm(false)}
+                type="button"
+                onClick={resetForm}
                 className="px-6 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all"
               >
                 Отмена
               </button>
-              <button className="px-6 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all">
+              <button
+                type="submit"
+                className="px-6 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all"
+              >
                 Создать
               </button>
             </div>
-          </div>
+          </form>
         )}
 
         {/* Список занятий */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-white/20">
-          <h3 className="text-2xl font-bold text-white mb-6">Текущие занятия</h3>
+          <h3 className="text-2xl font-bold text-white mb-6">Текущие занятия ({schedules.length})</h3>
           
-          {/* Пример занятия */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 mb-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-xl font-bold text-white mb-2">Хатха Йога</h4>
-                <p className="text-white/80 mb-2">Инструктор: Анна Петрова</p>
-                <div className="flex items-center space-x-6 text-white/60">
-                  <span>🕘 09:00 (90 мин)</span>
-                  <span>📍 Зал 1</span>
-                  <span>👥 8/15</span>
-                  <span>💰 1500 ₽</span>
-                </div>
-                <div className="mt-2">
-                  <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium border border-white/30">
-                    Начинающий
-                  </span>
-                  <span className="ml-2 px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-medium border border-green-500/30">
-                    Активно
-                  </span>
-                </div>
-              </div>
-              <div className="flex space-x-2">
-                <button className="p-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all">
-                  <Edit size={16} />
-                </button>
-                <button className="p-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-all">
-                  <Trash2 size={16} />
-                </button>
-              </div>
+          {schedules.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-white/70 text-lg">Занятия не найдены</p>
+              <p className="text-white/50 text-sm mt-2">Создайте первое занятие, нажав кнопку "Добавить занятие"</p>
             </div>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-xl font-bold text-white mb-2">Виньяса Флоу</h4>
-                <p className="text-white/80 mb-2">Инструктор: Михаил Сидоров</p>
-                <div className="flex items-center space-x-6 text-white/60">
-                  <span>🕘 18:30 (75 мин)</span>
-                  <span>📍 Зал 2</span>
-                  <span>👥 10/12</span>
-                  <span>💰 1800 ₽</span>
-                </div>
-                <div className="mt-2">
-                  <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium border border-white/30">
-                    Средний
-                  </span>
-                  <span className="ml-2 px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-medium border border-green-500/30">
-                    Активно
-                  </span>
+          ) : (
+            schedules.map((schedule) => (
+              <div key={schedule.id} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 mb-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-xl font-bold text-white mb-2">{schedule.name}</h4>
+                    <p className="text-white/80 mb-2">Инструктор: {schedule.instructor}</p>
+                    <div className="flex items-center space-x-6 text-white/60">
+                      <span>🕘 {schedule.time} ({schedule.duration} мин)</span>
+                      <span>📍 {schedule.location}</span>
+                      <span>👥 {schedule.currentBookings}/{schedule.maxBookings}</span>
+                      <span>💰 {schedule.price} ₽</span>
+                    </div>
+                    <div className="mt-2">
+                      <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium border border-white/30">
+                        {schedule.level}
+                      </span>
+                      <span className={`ml-2 px-3 py-1 rounded-full text-sm font-medium border ${
+                        schedule.isActive
+                          ? 'bg-green-500/20 text-green-300 border-green-500/30'
+                          : 'bg-red-500/20 text-red-300 border-red-500/30'
+                      }`}>
+                        {schedule.isActive ? 'Активно' : 'Неактивно'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="p-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all">
+                      <Edit size={16} />
+                    </button>
+                    <button 
+                      onClick={() => {
+                        if (window.confirm('Вы уверены, что хотите удалить это занятие?')) {
+                          setSchedules(prev => prev.filter(s => s.id !== schedule.id));
+                        }
+                      }}
+                      className="p-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-all"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="flex space-x-2">
-                <button className="p-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all">
-                  <Edit size={16} />
-                </button>
-                <button className="p-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-all">
-                  <Trash2 size={16} />
-                </button>
-                </div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
     </div>
