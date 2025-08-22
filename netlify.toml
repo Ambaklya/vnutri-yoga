@@ -1,6 +1,7 @@
 [build]
-  publish = "client/build"
+  base = "client"
   command = "npm run build"
+  publish = "build"
 
 [[redirects]]
   from = "/*"
@@ -9,7 +10,6 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  NPM_VERSION = "9"
 
 [[headers]]
   for = "/*"
