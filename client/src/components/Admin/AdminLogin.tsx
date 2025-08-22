@@ -17,11 +17,13 @@ const AdminLogin: React.FC = () => {
     setIsLoading(true);
 
     try {
+      console.log('Попытка входа с:', { email, password });
       const success = await login(email, password);
       if (!success) {
         setError('Неверный email или пароль');
       }
     } catch (err) {
+      console.error('Ошибка входа:', err);
       setError('Ошибка подключения к серверу');
     } finally {
       setIsLoading(false);

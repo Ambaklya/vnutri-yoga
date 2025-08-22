@@ -50,12 +50,14 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
+      console.log('AdminAuthContext: попытка входа через API');
       const response = await apiService.adminLogin(email, password);
+      console.log('AdminAuthContext: успешный ответ от API:', response);
       localStorage.setItem('adminToken', response.token);
       setAdmin(response.admin);
       return true;
     } catch (error) {
-      console.error('Admin login error:', error);
+      console.error('AdminAuthContext: ошибка входа:', error);
       return false;
     } finally {
       setIsLoading(false);

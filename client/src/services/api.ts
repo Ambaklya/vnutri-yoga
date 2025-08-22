@@ -101,7 +101,10 @@ class ApiService {
 
   // Admin methods
   async adminLogin(email: string, password: string): Promise<{ token: string; admin: AdminUser }> {
+    console.log('ApiService: отправка запроса на', this.api.defaults.baseURL + '/admin/auth/login');
+    console.log('ApiService: данные для входа:', { email, password });
     const response = await this.api.post('/admin/auth/login', { email, password });
+    console.log('ApiService: ответ от сервера:', response.data);
     return response.data;
   }
 

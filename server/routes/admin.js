@@ -16,11 +16,23 @@ const authenticateAdmin = (req, res, next) => {
   }
 };
 
+// Тестовый endpoint для проверки API
+router.get('/test', (req, res) => {
+  res.json({ 
+    message: 'Admin API работает!',
+    timestamp: new Date().toISOString(),
+    baseURL: req.protocol + '://' + req.get('host') + req.originalUrl
+  });
+});
+
 // Аутентификация администратора
 router.post('/auth/login', (req, res) => {
   const { email, password } = req.body;
   
+  console.log('Получен запрос на вход:', { email, password });
+  
   if (email === 'admin@vnutri.ru' && password === 'admin123') {
+    console.log('Успешная аутентификация для:', email);
     res.json({
       token: 'admin-token',
       admin: {
@@ -33,6 +45,7 @@ router.post('/auth/login', (req, res) => {
       }
     });
   } else {
+    console.log('Неверные данные для входа:', { email, password });
     res.status(401).json({ error: 'Invalid credentials' });
   }
 });
