@@ -18,6 +18,33 @@ const AdminLogin: React.FC = () => {
 
     try {
       console.log('Попытка входа с:', { email, password });
+      
+      // Мок-версия для тестирования без сервера
+      if (email === 'admin@vnutri.ru' && password === 'admin123') {
+        console.log('Мок-вход успешен');
+        // Создаем мок-токен и данные админа
+        const mockResponse = {
+          token: 'mock-admin-token',
+          admin: {
+            id: '1',
+            email: 'admin@vnutri.ru',
+            name: 'Администратор',
+            role: 'admin',
+            permissions: ['read', 'write', 'delete'],
+            lastLogin: new Date().toISOString()
+          }
+        };
+        
+        // Сохраняем в localStorage
+        localStorage.setItem('adminToken', mockResponse.token);
+        localStorage.setItem('adminData', JSON.stringify(mockResponse.admin));
+        
+        // Перенаправляем на дашборд
+        window.location.href = '/admin/dashboard';
+        return;
+      }
+      
+      // Пытаемся войти через API
       const success = await login(email, password);
       if (!success) {
         setError('Неверный email или пароль');

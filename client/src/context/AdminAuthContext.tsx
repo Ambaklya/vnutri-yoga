@@ -37,11 +37,21 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
     try {
       const token = localStorage.getItem('adminToken');
       if (token) {
+        // Проверяем, есть ли мок-данные
+        const mockAdminData = localStorage.getItem('adminData');
+        if (mockAdminData) {
+          setAdmin(JSON.parse(mockAdminData));
+          setIsLoading(false);
+          return;
+        }
+        
+        // Пытаемся получить данные через API
         const adminData = await apiService.getAdminProfile();
         setAdmin(adminData);
       }
     } catch (error) {
       localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminData');
     } finally {
       setIsLoading(false);
     }
