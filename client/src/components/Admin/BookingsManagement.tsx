@@ -10,7 +10,8 @@ import {
   Calendar,
   User,
   Phone,
-  Mail
+  Mail,
+  Trash2
 } from 'lucide-react';
 import { Booking } from '../../types/admin';
 import { apiService } from '../../services/api';
