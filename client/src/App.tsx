@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Lock } from 'lucide-react';
 import Navigation from './components/Navigation/Navigation';
 import ClassesView from './components/Classes/ClassesView';
 import VideosView from './components/Videos/VideosView';
