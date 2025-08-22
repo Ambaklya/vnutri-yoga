@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, MapPin } from 'lucide-react';
+import { Clock, Users, MapPin } from 'lucide-react';
 
 const ClassesView: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
