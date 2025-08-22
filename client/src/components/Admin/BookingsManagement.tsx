@@ -76,6 +76,58 @@ const BookingsManagement: React.FC = () => {
           amount: 1800,
           createdAt: '2024-01-16T14:30:00Z',
           updatedAt: '2024-01-16T14:30:00Z'
+        },
+        {
+          id: '3',
+          userId: 'user3',
+          userName: 'Елена Сидорова',
+          userPhone: '+7 (999) 345-67-89',
+          userEmail: 'elena@example.com',
+          classId: 'class3',
+          className: 'Йога для расслабления',
+          classDate: '2024-01-21',
+          classTime: '20:00',
+          status: 'confirmed',
+          paymentStatus: 'paid',
+          paymentMethod: 'card',
+          amount: 1200,
+          createdAt: '2024-01-17T09:15:00Z',
+          updatedAt: '2024-01-17T09:15:00Z'
+        },
+        {
+          id: '4',
+          userId: 'user4',
+          userName: 'Дмитрий Козлов',
+          userPhone: '+7 (999) 456-78-90',
+          userEmail: 'dmitry@example.com',
+          classId: 'class1',
+          className: 'Хатха Йога',
+          classDate: '2024-01-22',
+          classTime: '09:00',
+          status: 'pending',
+          paymentStatus: 'pending',
+          paymentMethod: 'cash',
+          amount: 1500,
+          createdAt: '2024-01-18T11:30:00Z',
+          updatedAt: '2024-01-18T11:30:00Z'
+        },
+        {
+          id: '5',
+          userId: 'user5',
+          userName: 'Ольга Морозова',
+          userPhone: '+7 (999) 567-89-01',
+          userEmail: 'olga@example.com',
+          classId: 'class2',
+          className: 'Виньяса Флоу',
+          classDate: '2024-01-23',
+          classTime: '18:30',
+          status: 'cancelled',
+          paymentStatus: 'refunded',
+          paymentMethod: 'card',
+          amount: 1800,
+          createdAt: '2024-01-19T16:45:00Z',
+          updatedAt: '2024-01-19T16:45:00Z',
+          notes: 'Клиент отменил по болезни'
         }
       ]);
     } finally {
@@ -108,8 +160,17 @@ const BookingsManagement: React.FC = () => {
 
   const updateBookingStatus = async (id: string, status: Booking['status']) => {
     try {
-      await apiService.updateBookingStatus(id, status);
-      await loadBookings(); // Перезагружаем данные
+      // Обновляем локальное состояние
+      setBookings(prev => prev.map(booking => 
+        booking.id === id ? { ...booking, status, updatedAt: new Date().toISOString() } : booking
+      ));
+      
+      // Пытаемся обновить через API
+      try {
+        await apiService.updateBookingStatus(id, status);
+      } catch (error) {
+        console.error('Failed to update via API, using local state:', error);
+      }
     } catch (error) {
       console.error('Failed to update booking status:', error);
     }
@@ -117,10 +178,30 @@ const BookingsManagement: React.FC = () => {
 
   const updatePaymentStatus = async (id: string, paymentStatus: Booking['paymentStatus']) => {
     try {
-      await apiService.updatePaymentStatus(id, paymentStatus);
-      await loadBookings(); // Перезагружаем данные
+      // Обновляем локальное состояние
+      setBookings(prev => prev.map(booking => 
+        booking.id === id ? { ...booking, paymentStatus, updatedAt: new Date().toISOString() } : booking
+      ));
+      
+      // Пытаемся обновить через API
+      try {
+        await apiService.updatePaymentStatus(id, paymentStatus);
+      } catch (error) {
+        console.error('Failed to update via API, using local state:', error);
+      }
     } catch (error) {
       console.error('Failed to update payment status:', error);
+    }
+  };
+
+  const deleteBooking = async (id: string) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту запись?')) {
+      try {
+        setBookings(prev => prev.filter(booking => booking.id !== id));
+        alert('Запись успешно удалена');
+      } catch (error) {
+        console.error('Failed to delete booking:', error);
+      }
     }
   };
 

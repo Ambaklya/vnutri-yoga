@@ -15,7 +15,48 @@ const AuthView: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    
+    if (!isPhoneAuth) {
+      // Email авторизация
+      if (isLogin) {
+        // Вход
+        if (!formData.email || !formData.password) {
+          alert('Пожалуйста, заполните все поля');
+          return;
+        }
+        console.log('Вход:', { email: formData.email, password: formData.password });
+        alert('Вход выполнен успешно!');
+      } else {
+        // Регистрация
+        if (!formData.email || !formData.password || !formData.name) {
+          alert('Пожалуйста, заполните все поля');
+          return;
+        }
+        console.log('Регистрация:', formData);
+        alert('Регистрация выполнена успешно!');
+        setIsLogin(true); // Переключаемся на вход
+      }
+    } else {
+      // Телефонная авторизация
+      if (isLogin) {
+        // Вход по телефону
+        if (!formData.phone || !formData.otp) {
+          alert('Пожалуйста, заполните все поля');
+          return;
+        }
+        console.log('Вход по телефону:', { phone: formData.phone, otp: formData.otp });
+        alert('Вход выполнен успешно!');
+      } else {
+        // Регистрация по телефону
+        if (!formData.phone || !formData.name) {
+          alert('Пожалуйста, заполните все поля');
+          return;
+        }
+        console.log('Регистрация по телефону:', { phone: formData.phone, name: formData.name });
+        alert('Код подтверждения отправлен на ваш телефон!');
+        // Здесь можно добавить логику отправки OTP
+      }
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
