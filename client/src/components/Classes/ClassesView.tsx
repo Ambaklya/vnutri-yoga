@@ -11,6 +11,7 @@ interface ClassItem {
   capacity: number;
   enrolled: number;
   date: string;
+  location: string;
   recurringDays?: string[];
 }
 
@@ -42,7 +43,7 @@ const ClassesView: React.FC = () => {
       level: 'Начинающий',
       capacity: 15,
       enrolled: 8,
-
+      location: 'Зал 1',
       date: '2024-01-20',
       recurringDays: ['monday', 'wednesday', 'friday']
     },
@@ -55,7 +56,7 @@ const ClassesView: React.FC = () => {
       level: 'Средний',
       capacity: 12,
       enrolled: 10,
-
+      location: 'Зал 2',
       date: '2024-01-20',
       recurringDays: ['tuesday', 'thursday']
     },
@@ -68,7 +69,7 @@ const ClassesView: React.FC = () => {
       level: 'Начинающий',
       capacity: 20,
       enrolled: 15,
-
+      location: 'Зал 1',
       date: '2024-01-20',
       recurringDays: ['monday', 'wednesday', 'friday']
     }
