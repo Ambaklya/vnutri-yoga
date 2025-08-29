@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Filter, Download, Eye, Phone, Mail, Calendar, User, Users, X } from 'lucide-react';
-import { apiService } from '../../services/api';
+import { ArrowLeft, Search, Download, Eye, Phone, Mail, Calendar, User, Users, X } from 'lucide-react';
 
 interface Client {
   id: string;
@@ -27,10 +26,6 @@ const ClientsManagement: React.FC = () => {
   useEffect(() => {
     loadClients();
   }, []);
-
-  useEffect(() => {
-    filterClients();
-  }, [clients, searchTerm, statusFilter, sourceFilter]);
 
   const loadClients = async () => {
     try {
@@ -98,6 +93,10 @@ const ClientsManagement: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    filterClients();
+  }, [clients, searchTerm, statusFilter, sourceFilter]);
 
   const filterClients = () => {
     let filtered = clients;

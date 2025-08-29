@@ -13,6 +13,7 @@ import BookingsManagement from './components/Admin/BookingsManagement';
 import ScheduleManagement from './components/Admin/ScheduleManagement';
 import ClientsManagement from './components/Admin/ClientsManagement';
 import ClientDashboard from './components/Client/ClientDashboard';
+import TestPage from './components/TestPage';
 
 const App: React.FC = () => {
   return (
@@ -97,6 +98,9 @@ const App: React.FC = () => {
           
                       {/* Клиентские маршруты */}
             <Route path="/profile" element={<ClientDashboard />} />
+            
+            {/* Тестовый маршрут */}
+            <Route path="/test" element={<TestPage />} />
           </Routes>
         </ClassesProvider>
       </AdminAuthProvider>

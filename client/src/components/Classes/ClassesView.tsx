@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, Users, MapPin, ChevronLeft, ChevronRight, Calendar, X, Check } from 'lucide-react';
+import { Clock, Users, ChevronLeft, ChevronRight, X, Check } from 'lucide-react';
 import { useClasses, ClassSchedule } from '../../context/ClassesContext';
 
 interface ClassItem {
@@ -33,7 +33,7 @@ const ClassesView: React.FC = () => {
     phone: '',
     email: ''
   });
-  const [isUserRegistered, setIsUserRegistered] = useState(false);
+
 
   // Генерация календаря на месяц
   const generateCalendarDays = (date: Date) => {
@@ -65,10 +65,7 @@ const ClassesView: React.FC = () => {
     return months[date.getMonth()];
   };
 
-  const getDayName = (date: Date) => {
-    const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-    return days[date.getDay()];
-  };
+
 
   const isToday = (date: Date) => {
     const today = new Date();

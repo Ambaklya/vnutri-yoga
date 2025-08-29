@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   User, 
   Calendar, 
   Clock, 
   Target, 
-  Award, 
-  TrendingUp, 
-  BookOpen,
-  Heart,
-  Activity,
+  Award,
   Star
 } from 'lucide-react';
 
@@ -32,14 +28,14 @@ interface ClientProgress {
 }
 
 const ClientDashboard: React.FC = () => {
-  const [clientInfo, setClientInfo] = useState({
+  const [clientInfo] = useState({
     name: 'Анна Иванова',
     email: 'anna@example.com',
     phone: '+7 (999) 123-45-67',
     joinDate: '2024-01-01'
   });
 
-  const [upcomingClasses, setUpcomingClasses] = useState<ClientClass[]>([
+  const [upcomingClasses] = useState<ClientClass[]>([
     {
       id: '1',
       name: 'Хатха Йога',
@@ -60,7 +56,7 @@ const ClientDashboard: React.FC = () => {
     }
   ]);
 
-  const [recentClasses, setRecentClasses] = useState<ClientClass[]>([
+  const [recentClasses] = useState<ClientClass[]>([
     {
       id: '3',
       name: 'Хатха Йога',
@@ -81,7 +77,7 @@ const ClientDashboard: React.FC = () => {
     }
   ]);
 
-  const [progress, setProgress] = useState<ClientProgress>({
+  const [progress] = useState<ClientProgress>({
     totalClasses: 25,
     completedClasses: 23,
     streak: 7,
