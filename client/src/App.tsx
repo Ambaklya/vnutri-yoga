@@ -6,17 +6,20 @@ import ClassesView from './components/Classes/ClassesView';
 import VideosView from './components/Videos/VideosView';
 import AuthView from './components/Auth/AuthView';
 import { AdminAuthProvider } from './context/AdminAuthContext';
+import { ClassesProvider } from './context/ClassesContext';
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import BookingsManagement from './components/Admin/BookingsManagement';
 import ScheduleManagement from './components/Admin/ScheduleManagement';
+import ClientsManagement from './components/Admin/ClientsManagement';
 import ClientDashboard from './components/Client/ClientDashboard';
 
 const App: React.FC = () => {
   return (
     <Router>
       <AdminAuthProvider>
-        <Routes>
+        <ClassesProvider>
+          <Routes>
           {/* Публичные маршруты */}
           <Route path="/" element={
             <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800">
@@ -90,10 +93,12 @@ const App: React.FC = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/bookings" element={<BookingsManagement />} />
           <Route path="/admin/schedule" element={<ScheduleManagement />} />
+          <Route path="/admin/clients" element={<ClientsManagement />} />
           
-          {/* Клиентские маршруты */}
-          <Route path="/profile" element={<ClientDashboard />} />
-        </Routes>
+                      {/* Клиентские маршруты */}
+            <Route path="/profile" element={<ClientDashboard />} />
+          </Routes>
+        </ClassesProvider>
       </AdminAuthProvider>
     </Router>
   );

@@ -174,10 +174,16 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => window.location.href = '/admin/bookings'}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Просмотреть все записи
               </button>
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => window.location.href = '/admin/bookings'}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Подтвердить ожидающие
               </button>
             </div>
@@ -223,11 +229,17 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Функция создания периода цен будет добавлена в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 <Plus size={16} className="inline mr-2" />
                 Создать период
               </button>
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Функция управления ценами будет добавлена в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Управлять ценами
               </button>
             </div>
@@ -245,11 +257,44 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Финансовые отчеты будут доступны в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Финансовые отчеты
               </button>
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Аналитика популярности занятий будет доступна в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Популярность занятий
+              </button>
+            </div>
+          </div>
+
+          {/* Управление клиентами */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center">
+                <Users className="text-indigo-400" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">База клиентов</h3>
+                <p className="text-white/70 text-sm">Управление данными всех клиентов</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <button 
+                onClick={() => window.location.href = '/admin/clients'}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
+                Просмотреть всех клиентов
+              </button>
+              <button 
+                onClick={() => window.location.href = '/admin/clients'}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
+                Экспорт данных
               </button>
             </div>
           </div>
@@ -266,10 +311,16 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Настройки синхронизации будут доступны в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Настройки синхронизации
               </button>
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Принудительная синхронизация будет доступна в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Принудительная синхронизация
               </button>
             </div>
@@ -287,10 +338,16 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Редактирование профиля администратора будет доступно в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Профиль администратора
               </button>
-              <button className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30">
+              <button 
+                onClick={() => alert('Системные настройки будут доступны в следующем обновлении')}
+                className="w-full py-3 px-4 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all border border-white/30"
+              >
                 Системные настройки
               </button>
             </div>

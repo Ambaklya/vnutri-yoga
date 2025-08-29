@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, Users, MapPin, ChevronLeft, ChevronRight, Calendar, X, Check } from 'lucide-react';
+import { useClasses, ClassSchedule } from '../../context/ClassesContext';
 
 interface ClassItem {
   id: number;
@@ -22,58 +23,17 @@ interface BookingForm {
 }
 
 const ClassesView: React.FC = () => {
+  const { classes, getClassesForDate } = useClasses();
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
+  const [selectedClass, setSelectedClass] = useState<ClassSchedule | null>(null);
   const [bookingForm, setBookingForm] = useState<BookingForm>({
     name: '',
     phone: '',
     email: ''
   });
   const [isUserRegistered, setIsUserRegistered] = useState(false);
-
-  const mockClasses: ClassItem[] = [
-    {
-      id: 1,
-      name: 'Хатха Йога',
-      instructor: 'Анна Петрова',
-      time: '09:00',
-      duration: '90 мин',
-      level: 'Начинающий',
-      capacity: 15,
-      enrolled: 8,
-      location: 'Зал 1',
-      date: '2024-01-20',
-      recurringDays: ['monday', 'wednesday', 'friday']
-    },
-    {
-      id: 2,
-      name: 'Виньяса Флоу',
-      instructor: 'Михаил Сидоров',
-      time: '18:30',
-      duration: '75 мин',
-      level: 'Средний',
-      capacity: 12,
-      enrolled: 10,
-      location: 'Зал 2',
-      date: '2024-01-20',
-      recurringDays: ['tuesday', 'thursday']
-    },
-    {
-      id: 3,
-      name: 'Йога для расслабления',
-      instructor: 'Елена Смирнова',
-      time: '20:00',
-      duration: '60 мин',
-      level: 'Начинающий',
-      capacity: 20,
-      enrolled: 15,
-      location: 'Зал 1',
-      date: '2024-01-20',
-      recurringDays: ['monday', 'wednesday', 'friday']
-    }
-  ];
 
   // Генерация календаря на месяц
   const generateCalendarDays = (date: Date) => {
@@ -120,11 +80,13 @@ const ClassesView: React.FC = () => {
   };
 
   const hasClassesOnDate = (date: Date) => {
-    const dayName = getDayName(date).toLowerCase();
-    return mockClasses.some(cls => 
-      cls.recurringDays?.some(day => 
-        day.toLowerCase().includes(dayName.toLowerCase())
-      )
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayName = dayNames[date.getDay()];
+    return classes.some(cls => 
+      cls.isActive && 
+      cls.recurringDays.includes(dayName) &&
+      new Date(cls.startDate) <= date &&
+      new Date(cls.endDate) >= date
     );
   };
 
@@ -148,7 +110,7 @@ const ClassesView: React.FC = () => {
     });
   };
 
-  const handleBookClass = (classItem: ClassItem) => {
+  const handleBookClass = (classItem: ClassSchedule) => {
     setSelectedClass(classItem);
     setShowBookingModal(true);
   };
@@ -160,6 +122,24 @@ const ClassesView: React.FC = () => {
       alert('Пожалуйста, заполните все обязательные поля');
       return;
     }
+
+    // Сохраняем данные клиента в localStorage
+    const clientData = {
+      id: Date.now().toString(),
+      name: bookingForm.name,
+      phone: bookingForm.phone,
+      email: bookingForm.email || undefined,
+      registrationDate: new Date().toISOString(),
+      totalBookings: 1,
+      lastActivity: new Date().toISOString(),
+      status: 'active' as const,
+      source: 'website' as const
+    };
+
+    // Получаем существующих клиентов
+    const existingClients = JSON.parse(localStorage.getItem('yogaClients') || '[]');
+    const updatedClients = [...existingClients, clientData];
+    localStorage.setItem('yogaClients', JSON.stringify(updatedClients));
 
     // Здесь будет логика отправки записи на сервер
     console.log('Запись на занятие:', {
@@ -176,13 +156,8 @@ const ClassesView: React.FC = () => {
   };
 
   const filteredClasses = selectedDate 
-    ? mockClasses.filter(cls => 
-        cls.recurringDays?.some(day => {
-          const dayName = getDayName(selectedDate).toLowerCase();
-          return day.toLowerCase().includes(dayName.toLowerCase());
-        })
-      )
-    : mockClasses;
+    ? getClassesForDate(selectedDate)
+    : classes.filter(cls => cls.isActive);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 p-6">
@@ -322,12 +297,12 @@ const ClassesView: React.FC = () => {
                               <div className="flex items-center space-x-6 text-white/60">
                                 <div className="flex items-center space-x-2">
                                   <Clock size={18} />
-                                  <span>{classItem.time} ({classItem.duration})</span>
+                                  <span>{classItem.time} ({classItem.duration} мин)</span>
                                 </div>
 
                                 <div className="flex items-center space-x-2">
                                   <Users size={18} />
-                                  <span>{classItem.enrolled}/{classItem.capacity}</span>
+                                  <span>{classItem.currentBookings}/{classItem.maxBookings}</span>
                                 </div>
                               </div>
                             </div>
@@ -339,14 +314,14 @@ const ClassesView: React.FC = () => {
                         <div className="lg:ml-6 flex flex-col sm:flex-row gap-3">
                           <button 
                             onClick={() => handleBookClass(classItem)}
-                            disabled={classItem.enrolled >= classItem.capacity}
+                            disabled={classItem.currentBookings >= classItem.maxBookings}
                             className={`px-6 py-3 rounded-lg transition-all font-medium border ${
-                              classItem.enrolled >= classItem.capacity
+                              classItem.currentBookings >= classItem.maxBookings
                                 ? 'bg-red-500/20 text-red-300 border-red-500/30 cursor-not-allowed'
                                 : 'bg-white/20 text-white border-white/30 hover:bg-white/30'
                             }`}
                           >
-                            {classItem.enrolled >= classItem.capacity ? 'Мест нет' : 'Записаться'}
+                            {classItem.currentBookings >= classItem.maxBookings ? 'Мест нет' : 'Записаться'}
                           </button>
                           <button className="px-6 py-3 border border-white/30 text-white rounded-lg hover:bg-white/10 transition-all font-medium">
                             Подробнее
@@ -379,7 +354,7 @@ const ClassesView: React.FC = () => {
             <div className="mb-6 p-4 bg-white/10 rounded-lg border border-white/20">
               <h4 className="text-lg font-bold text-white mb-2">{selectedClass.name}</h4>
               <p className="text-white/80 mb-1">Инструктор: {selectedClass.instructor}</p>
-              <p className="text-white/80 mb-1">Время: {selectedClass.time} ({selectedClass.duration})</p>
+              <p className="text-white/80 mb-1">Время: {selectedClass.time} ({selectedClass.duration} мин)</p>
               <p className="text-white/80">Место: {selectedClass.location}</p>
             </div>
 

@@ -1,58 +1,11 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, ArrowLeft } from 'lucide-react';
+import { useClasses, ClassSchedule } from '../../context/ClassesContext';
 
 const ScheduleManagement: React.FC = () => {
+  const { classes, addClass, updateClass, deleteClass } = useClasses();
   const [showForm, setShowForm] = useState(false);
-  const [schedules, setSchedules] = useState([
-    {
-      id: '1',
-      name: 'Хатха Йога',
-      instructor: 'Анна Петрова',
-      time: '09:00',
-      duration: 90,
-      price: 1500,
-      capacity: 15,
-      currentBookings: 8,
-      maxBookings: 15,
-      level: 'Начинающий',
-      isActive: true,
-      startDate: '2024-01-01',
-      endDate: '2024-03-31',
-      recurringDays: ['monday', 'wednesday', 'friday']
-    },
-    {
-      id: '2',
-      name: 'Виньяса Флоу',
-      instructor: 'Михаил Сидоров',
-      time: '18:30',
-      duration: 75,
-      price: 1800,
-      capacity: 12,
-      currentBookings: 10,
-      maxBookings: 12,
-      level: 'Средний',
-      isActive: true,
-      startDate: '2024-01-01',
-      endDate: '2024-03-31',
-      recurringDays: ['tuesday', 'thursday']
-    },
-    {
-      id: '3',
-      name: 'Йога для расслабления',
-      instructor: 'Елена Смирнова',
-      time: '20:00',
-      duration: 60,
-      price: 1200,
-      capacity: 20,
-      currentBookings: 15,
-      maxBookings: 20,
-      level: 'Начинающий',
-      isActive: true,
-      startDate: '2024-01-01',
-      endDate: '2024-03-31',
-      recurringDays: ['monday', 'wednesday', 'friday']
-    }
-  ]);
+  const [editingClass, setEditingClass] = useState<ClassSchedule | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     instructor: '',
@@ -77,22 +30,31 @@ const ScheduleManagement: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.instructor || !formData.time) {
+    if (!formData.name || !formData.instructor || !formData.time || !formData.startDate || !formData.endDate) {
       alert('Пожалуйста, заполните все обязательные поля');
       return;
     }
 
-    const newSchedule = {
-      id: Date.now().toString(),
-      ...formData,
-      currentBookings: 0,
-      maxBookings: formData.capacity,
-      level: 'Начинающий',
-      location: 'Зал 1',
-      isActive: true
-    };
-
-    setSchedules(prev => [...prev, newSchedule]);
+    if (editingClass) {
+      // Обновляем существующее занятие
+      updateClass(editingClass.id, {
+        ...formData,
+        maxBookings: formData.capacity,
+        location: 'Зал 1',
+        isActive: true
+      });
+      setEditingClass(null);
+      alert('Занятие успешно обновлено!');
+    } else {
+      // Создаем новое занятие
+      addClass({
+        ...formData,
+        maxBookings: formData.capacity,
+        location: 'Зал 1',
+        isActive: true
+      });
+      alert('Занятие успешно создано!');
+    }
     
     // Сбрасываем форму
     setFormData({
@@ -110,8 +72,6 @@ const ScheduleManagement: React.FC = () => {
     
     // Скрываем форму
     setShowForm(false);
-    
-    alert('Занятие успешно создано!');
   };
 
   const resetForm = () => {
@@ -128,6 +88,30 @@ const ScheduleManagement: React.FC = () => {
       recurringDays: []
     });
     setShowForm(false);
+    setEditingClass(null);
+  };
+
+  const handleEdit = (schedule: ClassSchedule) => {
+    setEditingClass(schedule);
+    setFormData({
+      name: schedule.name,
+      instructor: schedule.instructor,
+      time: schedule.time,
+      duration: schedule.duration,
+      price: schedule.price,
+      capacity: schedule.capacity,
+      level: schedule.level,
+      startDate: schedule.startDate,
+      endDate: schedule.endDate,
+      recurringDays: schedule.recurringDays
+    });
+    setShowForm(true);
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm('Вы уверены, что хотите удалить это занятие?')) {
+      deleteClass(id);
+    }
   };
 
   return (
@@ -156,10 +140,12 @@ const ScheduleManagement: React.FC = () => {
           </button>
         </div>
 
-        {/* Форма добавления */}
+        {/* Форма добавления/редактирования */}
         {showForm && (
           <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-8 border border-white/20">
-            <h3 className="text-2xl font-bold text-white mb-6">Новое занятие</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">
+              {editingClass ? 'Редактирование занятия' : 'Новое занятие'}
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
@@ -341,7 +327,7 @@ const ScheduleManagement: React.FC = () => {
                 type="submit"
                 className="px-6 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all"
               >
-                Создать
+                {editingClass ? 'Обновить' : 'Создать'}
               </button>
             </div>
           </form>
@@ -349,25 +335,25 @@ const ScheduleManagement: React.FC = () => {
 
         {/* Список занятий */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-white/20">
-          <h3 className="text-2xl font-bold text-white mb-6">Текущие занятия ({schedules.length})</h3>
+          <h3 className="text-2xl font-bold text-white mb-6">Текущие занятия ({classes.length})</h3>
           
-          {schedules.length === 0 ? (
+          {classes.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-white/70 text-lg">Занятия не найдены</p>
               <p className="text-white/50 text-sm mt-2">Создайте первое занятие, нажав кнопку "Добавить занятие"</p>
             </div>
           ) : (
-            schedules.map((schedule) => (
+            classes.map((schedule) => (
               <div key={schedule.id} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 mb-4">
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="text-xl font-bold text-white mb-2">{schedule.name}</h4>
                     <p className="text-white/80 mb-2">Инструктор: {schedule.instructor}</p>
-                                    <div className="flex items-center space-x-6 text-white/60">
-                  <span>🕘 {schedule.time} ({schedule.duration} мин)</span>
-                  <span>👥 {schedule.currentBookings}/{schedule.maxBookings}</span>
-                  <span>💰 {schedule.price} ₽</span>
-                </div>
+                    <div className="flex items-center space-x-6 text-white/60">
+                      <span>🕘 {schedule.time} ({schedule.duration} мин)</span>
+                      <span>👥 {schedule.currentBookings}/{schedule.maxBookings}</span>
+                      <span>💰 {schedule.price} ₽</span>
+                    </div>
                     <div className="mt-2">
                       <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium border border-white/30">
                         {schedule.level}
@@ -382,15 +368,14 @@ const ScheduleManagement: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="p-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all">
+                    <button 
+                      onClick={() => handleEdit(schedule)}
+                      className="p-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all"
+                    >
                       <Edit size={16} />
                     </button>
                     <button 
-                      onClick={() => {
-                        if (window.confirm('Вы уверены, что хотите удалить это занятие?')) {
-                          setSchedules(prev => prev.filter(s => s.id !== schedule.id));
-                        }
-                      }}
+                      onClick={() => handleDelete(schedule.id)}
                       className="p-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-all"
                     >
                       <Trash2 size={16} />
